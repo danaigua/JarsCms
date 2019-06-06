@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jar.qiuzhisystem.dao.TagDao">
+
+	<resultMap type="Tag" id="TagResult">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+	</resultMap>
+
+	<select id="randomList" parameterType="Integer" resultMap="TagResult">
+		select * from t_tag order by RAND() limit #{n}
+	</select>
+	
+	<select id="list" parameterType="Map" resultMap="TagResult">
+		select * from t_tag
+		<where>
+			<if test="name!=null and name!='' ">
+				and name like #{name}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	<select id="getTotal" parameterType="Map" resultType="Long">
+		select count(*) from t_tag
+		<where>
+			<if test="name!=null and name!='' ">
+				and name like #{name}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="add" parameterType="Tag">
+		insert into t_tag values(null,#{name});
+	</insert>
+	
+	<update id="update" parameterType="Tag">
+		update t_tag
+		<set>
+			<if test="name!=null and name!='' ">
+				name=#{name},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+		delete from t_tag where id=#{id}
+	</delete>
+	
+</mapper> 
